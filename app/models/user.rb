@@ -335,7 +335,7 @@ class User < Principal
     
   # Return password digest
   def self.hash_password(clear_password)
-    Digest::SHA1.hexdigest(clear_password || "")
+    Digest::MD5.hexdigest(clear_password || "")
   end
 end
 
