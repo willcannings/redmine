@@ -80,9 +80,9 @@ ActionController::Routing::Routes.draw do |map|
     board_routes.with_options :conditions => {:method => :get} do |board_views|
       board_views.connect 'projects/:project_id/boards', :action => 'index'
       board_views.connect 'projects/:project_id/boards/new', :action => 'new'
-      board_views.connect 'projects/:project_id/boards/:id', :action => 'show'
-      board_views.connect 'projects/:project_id/boards/:id.:format', :action => 'show'
-      board_views.connect 'projects/:project_id/boards/:id/edit', :action => 'edit'
+      board_views.connect 'projects/:project_id/boards/:id', :action => 'show', :id => /\d+/
+      board_views.connect 'projects/:project_id/boards/:id.:format', :action => 'show', :id => /\d+/
+      board_views.connect 'projects/:project_id/boards/:id/edit', :action => 'edit', :id => /\d+/
     end
     board_routes.with_options :conditions => {:method => :post} do |board_actions|
       board_actions.connect 'projects/:project_id/boards', :action => 'new'
@@ -265,7 +265,7 @@ ActionController::Routing::Routes.draw do |map|
   end
  
   # Install the default route as the lowest priority.
-  map.connect ':controller/:action/:id'
+  map.connect ':controller/:action/:id', :id => nil
   map.connect 'robots.txt', :controller => 'welcome', :action => 'robots'
   # Used for OpenID
   map.root :controller => 'account', :action => 'login'

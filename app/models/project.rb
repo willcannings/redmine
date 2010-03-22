@@ -70,7 +70,7 @@ class Project < ActiveRecord::Base
   validates_length_of :homepage, :maximum => 255
   validates_length_of :identifier, :in => 1..20
   # donwcase letters, digits, dashes but not digits only
-  validates_format_of :identifier, :with => /^(?!\d+$)[a-z0-9\-]*$/, :if => Proc.new { |p| p.identifier_changed? }
+  validates_format_of :identifier, :with => /^(?!\d+$)[a-z0-9\-_\.]*$/, :if => Proc.new { |p| p.identifier_changed? }
   # reserved words
   validates_exclusion_of :identifier, :in => %w( new )
 
@@ -80,10 +80,11 @@ class Project < ActiveRecord::Base
   named_scope :active, { :conditions => "#{Project.table_name}.status = #{STATUS_ACTIVE}"}
   named_scope :all_public, { :conditions => { :is_public => true } }
   named_scope :visible, lambda { { :conditions => Project.visible_by(User.current) } }
-  
-  def identifier=(identifier)
-    super unless identifier_frozen?
-  end
+
+  # All references to projects are by an integer ID, so modifying the project identifier doesn't seem like it would cause a problem
+  # def identifier=(identifier)
+  #   super unless identifier_frozen?
+  # end
   
   def identifier_frozen?
     errors[:identifier].nil? && !(new_record? || identifier.blank?)
