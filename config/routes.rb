@@ -263,7 +263,9 @@ ActionController::Routing::Routes.draw do |map|
     sys.connect 'sys/projects.:format', :action => 'projects', :conditions => {:method => :get}
     sys.connect 'sys/projects/:id/repository.:format', :action => 'create_project_repository', :conditions => {:method => :post}
   end
- 
+  
+  eval File.open(Rails.root.join('config', 'extra_routes.rb')).read if File.exists?(Rails.root.join('config', 'extra_routes.rb'))
+  
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id', :id => nil
   map.connect 'robots.txt', :controller => 'welcome', :action => 'robots'
